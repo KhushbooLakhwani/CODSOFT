@@ -1,0 +1,103 @@
+---
+title: "movie"
+output: html_document
+date: "2023-10-08"
+---
+
+```{r}
+library(caret)
+```
+
+ 
+```{r}
+iris<- read.csv("c:/users/DELL/Downloads/IRIS.csv")
+iris
+```
+
+
+```{r}
+head(iris,10)
+```
+
+
+ 
+```{r}
+
+summary(iris)
+```
+
+
+```{r}
+
+
+# Check the structure of the dataset
+str(iris)
+
+# Check for missing values
+sum(is.na(iris))
+
+```
+
+```{r}
+ # Load the Iris dataset
+data(iris)
+
+# Set a seed for reproducibility
+set.seed(123)
+
+# Create an index for data splitting
+splitIndex <- sample(1:nrow(iris), nrow(iris) * 0.7)
+
+# Split the data into training and testing sets
+trainData <- iris[splitIndex, ]
+testData <- iris[-splitIndex, ]
+
+
+dim(trainData)
+dim(testData)
+```
+
+
+```{r}
+str(trainData)
+
+```
+
+
+```{r}
+ # Load necessary libraries
+library(randomForest)
+
+
+ 
+# Ensure "Species" is treated as a factor
+#trainData$Species <- as.data.frame(trainData$Species)
+# Ensure "Species" is treated as a factor
+trainData$Species <- as.factor(trainData$Species)
+
+# Create a random forest model
+model <- randomForest(Species ~ ., data = trainData)
+
+```
+
+
+
+```{r}
+# Make predictions on the test dataset
+predictions <- predict(model, newdata = testData)
+
+# Load necessary libraries for evaluation
+library(caret)
+
+# Calculate accuracy
+accuracy <- confusionMatrix(predictions, testData$Species)$overall["Accuracy"]
+cat("Accuracy:", accuracy, "\n")
+
+# You can also calculate other metrics like precision, recall, F1-score, etc.
+
+```
+
+
+
+
+ 
