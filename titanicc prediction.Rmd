@@ -1,0 +1,303 @@
+---
+title: "Titanic predict"
+output: html_document
+date: "2023-10-08"
+---
+
+```{r}
+# Load the package
+library(readxl)
+
+```
+
+ 
+```{r}
+data1 <- read.csv("c:/users/DELL/Downloads/tested.csv")
+data1
+
+```
+
+ 
+```{r}
+head(data1,10)
+
+```
+
+
+```{r}
+ggplot(data1, aes(x = Age, y = Fare)) +
+  geom_point() +
+  labs(x = "Age", y = "Fare") +
+  ggtitle("Scatter Plot of Age vs. Fare")
+
+
+```
+
+
+```{r}
+ggplot(data1, aes(x = Age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(x = "Age", y = "Frequency") +
+  ggtitle("Histogram of Age")
+
+```
+
+
+```{r}
+ggplot(data1, aes(x = Survived, y = Age, fill = factor(Survived))) +
+  geom_boxplot() +
+  labs(x = "Survived", y = "Age") +
+  ggtitle("Box Plot of Age by Survival Status")
+
+
+```
+
+
+```{r}
+ggplot(data1, aes(x = factor(Pclass))) +
+  geom_bar() +
+  labs(x = "Passenger Class", y = "Count") +
+  ggtitle("Bar Plot of Passenger Class")
+
+```
+
+
+```{r}
+ggplot(data1, aes(x = Age, fill = factor(Survived))) +
+  geom_density(alpha = 0.5) +
+  labs(x = "Age", y = "Density") +
+  ggtitle("Density Plot of Age by Survival Status")
+
+
+```
+
+
+```{r}
+# Calculate mean, median, and standard deviation of Age
+mean_age <- mean(data1$Age, na.rm = TRUE)
+median_age <- median(data1$Age, na.rm = TRUE)
+sd_age <- sd(data1$Age, na.rm = TRUE)
+
+```
+
+
+# Calculate percentiles (e.g., 25th and 75th percentiles) of Age
+
+```{r}
+percentile_25 <- quantile(data1$Age, 0.25, na.rm = TRUE)
+percentile_75 <- quantile(data1$Age, 0.75, na.rm = TRUE)
+```
+
+
+# Print the results
+```{r}
+cat("Mean Age:", mean_age, "\n")
+cat("Median Age:", median_age, "\n")
+cat("Standard Deviation of Age:", sd_age, "\n")
+cat("25th Percentile of Age:", percentile_25, "\n")
+cat("75th Percentile of Age:", percentile_75, "\n")
+```
+
+
+```{r}
+# Perform a t-test to compare Age between two groups (e.g., Survived vs. Not Survived)
+t_test_result <- t.test(data1$Age ~ data1$Survived)
+```
+
+# Print the t-test result
+
+```{r}
+print(t_test_result)
+```
+
+
+
+```{r}
+str(data1)
+```
+
+
+```{r}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Split the data into training (70%) and testing (30%) sets
+splitIndex <- createDataPartition(data$Survived,p=0.5,list =  FALSE)
+trainData <- data1[splitIndex, ]
+testData <- data1[-splitIndex, ]
+
+# Check the dimensions of the training and testing sets
+dim(trainData)
+dim(testData)
+
+```
+
+
+```{r}
+# Remove rows with missing values
+trainData <- na.omit(trainData)
+print(trainData)
+```
+
+
+```{r}
+# Impute missing values in the Age column with the mean
+mean_age <- mean(trainData$Age, na.rm = TRUE)
+trainData$Age[is.na(trainData$Age)] <- mean_age
+
+```
+
+# Create a logistic regression model
+```{r}
+ # Load necessary libraries
+library(rpart)
+
+# Create a decision tree model
+model <- rpart(Survived ~ Age + Sex + Pclass + Fare, data = trainData)
+
+```
+
+# Print the model summary
+```{r}
+print(model)
+```
+
+
+```{r}
+# Load necessary libraries
+library(pROC) # For ROC-AUC calculation
+ # Load necessary libraries
+library(rpart)
+library(caret)
+
+# Create a decision tree model
+model <- rpart(Survived ~ Age + Sex + pClass +Fare, data1 = trainData)
+
+# Make predictions on the test dataset
+predictions <- predict(model, newdata = testData, type = "class")
+
+# Convert both predictions and testData$Survived to factors with consistent levels
+predictions <- factor(predictions, levels = c("0", "1"))  # Assuming 0 and 1 are your levels
+testData$Survived <- factor(testData$Survived, levels = c("0", "1"))
+
+# Calculate accuracy using caret's confusionMatrix
+conf_matrix <- confusionMatrix(predictions, testData$Survived)
+accuracy <- conf_matrix$overall["Accuracy"]
+
+# Print the accuracy
+cat("Accuracy:", accuracy, "\n")
+
+```
+ 
+ 
+ 
+ 
+ 
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+
+
+```{r}
+
+```
+ 
